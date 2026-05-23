@@ -84,6 +84,35 @@ const renderFeaturesMap = () => {
 
     featureGrid.innerHTML = cardsHTML;
 };
+
+//----Render Navigation using map()----//
+
+const renderNavigation = () => {
+  //Desktop Nav
+  if (nav) {
+    const navHTML = navLinks
+    .map((link) => {
+      reutrn `
+      <a href="${link.href}" class="nav-link">
+      ${link.label}
+      </a>
+      `;
+    })
+    .join(""); // join() is needed ot convert the array of strings into one big string wihtout commas in betweeen 
+    //we use empty string ("") as a seperator because we dont want anything in between the links (no commas, no spaces, dashes, etc)
+    nav.innerHTML = navHTML; //this is where we insert the generated HTML into the page 
+  } //inner HTML is a property that allows us to set the HTML content of an element. When we set it, the browser parses the string as HTML and creates the corresponding DOM elements. In this case, it will create <a> elements inside the nav based on our navLinks data.
+
+  //Mobile Nav
+  if (mobileMenu) {
+    const mobileHTML = navLinks
+    .map((link) => {
+      return `
+      <a href="${link.href}" class="mobile-link">
+      ${link.label}`
+    })
+  }
+}
 // ----- Helpers / Functions -----
 
 // Update footer year automatically
