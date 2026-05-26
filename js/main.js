@@ -18,7 +18,9 @@ const featureGrid = document.getElementById("featureGrid");
 
 const nav = document.getElementById("nav");
 
-// -----Services Data (Array of Object)
+const siteHeader = document.querySelector(".site-header");
+
+// -----Services Data (Array of Object)-----
 
 const services = [
     {
@@ -43,7 +45,7 @@ const services = [
 const navLinks = [
     {label: "Home", href: "#hero"},
     {label: "Service", href: "#features"},
-    {lable: "Book", href: "#cta"},
+    {label: "Book", href: "#cta"},
     {label: "Contact", href: "#footer"}
 ];
 
@@ -88,11 +90,11 @@ const renderFeaturesMap = () => {
 //----Render Navigation using map()----//
 
 const renderNavigation = () => {
+
   //Desktop Nav
   if (nav) {
-    const navHTML = navLinks
-    .map((link) => {
-      reutrn `
+    const navHTML = navLinks.map((link) => {
+      return `
       <a href="${link.href}" class="nav-link">
       ${link.label}
       </a>
@@ -101,19 +103,32 @@ const renderNavigation = () => {
     .join(""); // join() is needed ot convert the array of strings into one big string wihtout commas in betweeen 
     //we use empty string ("") as a seperator because we dont want anything in between the links (no commas, no spaces, dashes, etc)
     nav.innerHTML = navHTML; //this is where we insert the generated HTML into the page 
-  } //inner HTML is a property that allows us to set the HTML content of an element. When we set it, the browser parses the string as HTML and creates the corresponding DOM elements. In this case, it will create <a> elements inside the nav based on our navLinks data.
+  }; //inner HTML is a property that allows us to set the HTML content of an element. When we set it, the browser parses the string as HTML and creates the corresponding DOM elements. In this case, it will create <a> elements inside the nav based on our navLinks data.
 
-  //Mobile Nav
+  //Mobile Nav 
   if (mobileMenu) {
-    const mobileHTML = navLinks
-    .map((link) => {
+    const mobileHTML = navLinks.map (link => {
       return `
       <a href="${link.href}" class="mobile-link">
-      ${link.label}`
-    })
+        ${link.label}
+        </a>
+      `;
+    }) .join("");
+
+    mobileMenu.innerHTML = mobileHTML;
   }
-}
+};
 // ----- Helpers / Functions -----
+
+const handleHeaderOnScroll = () => {
+  if (!siteHeader) return;
+
+  if (window.scrollY > 10) {
+    siteHeader.classList.add("is-scrolled");
+  } else {
+    siteHeader.classList.remove("is-scrolled");
+  }
+};
 
 // Update footer year automatically
 
@@ -165,6 +180,8 @@ const updateHeadingText = (newText) => {
 
 setCurrentYear();
 
+window.addEventListener("scroll", handleHeaderOnScroll);
+
 // 2) Hamburger menu toggle
 
 if (menuBtn) {
@@ -210,3 +227,4 @@ if (callBtn) {
 }
 renderFeaturesMap();
 renderNavigation();
+handleHeaderOnScroll();
