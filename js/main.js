@@ -1,10 +1,20 @@
-// ----- DOM Elements -----
+// =========================
+// File: js/main.js
+// Vintage Barbershop Project
+// =========================
 
+// ----- DOM Elements -----
 const yearEl = document.getElementById("year");
+
+const nav = document.getElementById("nav");
 
 const menuBtn = document.getElementById("menuBtn");
 
 const mobileMenu = document.getElementById("mobileMenu");
+
+const featureGrid = document.getElementById("featureGrid");
+
+const hoursList = document.getElementById("hoursList");
 
 const ctaBtn = document.getElementById("ctaBtn");
 
@@ -12,275 +22,471 @@ const callBtn = document.getElementById("callBtn");
 
 const phoneLink = document.getElementById("phoneLink");
 
+const addressLink = document.getElementById("addressLink");
+
+const emailLink = document.getElementById("emailLink");
+
 const heading = document.getElementById("heroHeading");
 
-const featureGrid = document.getElementById("featureGrid");
+const heroSubtext = document.getElementById("heroSubtext");
 
-const nav = document.getElementById("nav");
+// ----- Modal Elements -----
+const serviceModal = document.getElementById("serviceModal");
 
-const siteHeader = document.querySelector(".site-header");
+const serviceModalOverlay = document.getElementById("serviceModalOverlay");
 
-const cardsContainer = document.querySelector(".cards-container");
+const serviceModalClose = document.getElementById("serviceModalClose");
 
-// -----Services Data (Array of Object)-----
+const serviceModalTitle = document.getElementById("serviceModalTitle");
 
-const services = [
-    {
-        title: "Classic Haircut",
-        text: "Timeless cuts with mordern precision tailord to your style",
-        image: "assets/images/feature-1.jpg"
-    },
-    {
-        title: "Beard Trim",
-        text: "Shape and line-up your beard for a clean, sharp finish.",
-        image: "assets/images/feature-2.jpg"
-    },
-    {
-        title: "Straight Razor Shave",
-        text: "Hot towel treatment with a smooth traditional shave.",
-        image: "assets/images/feature-3.jpg"
-    }
-];
+const serviceModalPrice = document.getElementById("serviceModalPrice");
 
-//---- Navigation Data (Array of Objects) ----//
+const serviceModalList = document.getElementById("serviceModalList");
 
+// ----- Main Shop Object -----
+const shopInfo = {
+  name: "Vintage Barbershop",
+  address: "123 Main St, Your City",
+  phoneDisplay: "(555) 123-4567",
+  phoneRaw: "5551234567",
+  email: "hello@vintagebarbershop.com",
+};
+
+// ----- Navigation Data -----
 const navLinks = [
-    {label: "Home", href: "#hero"},
-    {label: "Service", href: "#features"},
-    {label: "Book", href: "#cta"},
-    {label: "Contact", href: "#footer"}
+  { label: "Home", href: "#hero" },
+  { label: "Services", href: "#features" },
+  { label: "Book", href: "#cta" },
+  { label: "Contact", href: "#footer" },
 ];
 
-//-----Render Features using forEach-----//
+// ----- Services Data -----
+const services = [
+  {
+    id: 1,
+    title: "Classic Haircut",
+    image: "assets/images/feature-1.jpg",
+    alt: "Classic haircut",
+    description: "Timeless cuts with modern precision—tailored to your style.",
+    price: 25,
+    popular: true,
+    details: [
+      "Consultation with your barber before the cut begins.",
+      "Hair sectioning and shape-up based on your preferred style.",
+      "Professional clippers, trimmers, and shears used for precision.",
+      "Neckline cleanup and finishing touches included.",
+      "Light styling product applied for a clean final look.",
+    ],
+  },
+  {
+    id: 2,
+    title: "Beard Trim",
+    image: "assets/images/feature-4.jpeg",
+    alt: "Beard trim",
+    description: "Shape, line-up, and refine your beard for a clean finish.",
+    price: 15,
+    popular: false,
+    details: [
+      "Beard assessment and shaping based on face structure.",
+      "Line-up around cheeks, jawline, and neckline.",
+      "Trimmers and detail tools used for crisp edges.",
+      "Conditioning beard product may be applied for softness.",
+      "Final symmetry check for a polished finish.",
+    ],
+  },
+  {
+    id: 3,
+    title: "Straight Razor Shave",
+    image: "assets/images/feature-3.jpg",
+    alt: "Straight razor shave",
+    description: "Hot towel, smooth shave, and classic barbershop experience.",
+    price: 30,
+    popular: true,
+    details: [
+      "Hot towel prep to soften facial hair and open pores.",
+      "Premium shaving cream or lather applied to protect the skin.",
+      "Straight razor shave performed with careful detailing.",
+      "Second hot towel may be used for comfort and cleanup.",
+      "Aftershave or soothing skin product applied after service.",
+    ],
+  },
+  {
+    id: 4,
+    title: "Fade & Style",
+    image: "assets/images/feature-2.jpg",
+    alt: "Fade haircut",
+    description: "A clean fade with finishing detail for a sharp, modern look.",
+    price: 35,
+    popular: false,
+    details: [                                                      
+      "Style consultation before clipper work begins.",
+      "Fade blended to your preferred level and finish.",
+      "Detailing around temples, neckline, and beard area if needed.",
+      "Scissors and clipper-over-comb may be used for texture.",
+      "Styling product added to complete the final look.",
+    ],
+  },
+  {
+    id: 5,
+    title: "Kids Cut",
+    image: "assets/images/feature-1.jpg",
+    alt: "Kids haircut",
+    description: "Clean, comfortable haircut service for younger clients.",
+    price: 20,
+    popular: false,
+    details: [
+      "Simple consultation with child and parent if needed.",
+      "Age-appropriate haircut with comfort in mind.",
+      "Careful clipper and scissor work for a clean finish.",
+      "Light cleanup around the neckline and ears.",
+      "Styled neatly before leaving the chair.",
+    ],
+  },
+  {
+    id: 6,
+    title: "Head Shave",
+    image: "assets/images/feature-3.jpg",
+    alt: "Head shave",
+    description: "Smooth head shave with classic barbershop treatment.",
+    price: 28,
+    popular: true,
+    details: [
+      "Scalp prep with warm towel treatment.",
+      "Protective shave product applied before razor work.",
+      "Close shave performed for a smooth finish.",
+      "Scalp cleaned and checked for even consistency.",
+      "Moisturizing scalp product applied after the shave.",
+    ],
+  },
+];
 
-// const renderFeatures = () => {
+// ----- Hours Data -----
+const businessHours = [
+  { day: "Monday", open: 9, close: 19 },
+  { day: "Tuesday", open: 9, close: 19 },
+  { day: "Wednesday", open: 9, close: 19 },
+  { day: "Thursday", open: 9, close: 19 },
+  { day: "Friday", open: 9, close: 19 },
+  { day: "Saturday", open: 10, close: 17 },
+  { day: "Sunday", open: 0, close: 0 },
+];
 
-//     if (!featureGrid) return;
-
-//     services.forEach(service => { //call array name and use forEach loops through it, service is the parameter that represents each item in the array as we loop through it 
-
-//         const card = document.createElement("article");
-//         //creating the element
-//         card.classList.add("feature-card");
-
-//         card.innerHTML = `
-//         <img src="${service.image}" alt="${service.title}" class= "feature-img" />
-//         <h3 class="feature-title">${service.title}</h3>
-//         <p class="feature-text">${service.text}</p>
-//         `; //insert data into the card using template literals
-
-//         featureGrid.appendChild(card); //add it to the page
-//     });
-// }
-
-const renderFeaturesMap = () => {
-  const cardsHTML = services
-    .map((service) => {
-      return`
-      <article class="feature-card">
-      <img src="${service.image}" alt="${service.title}" class="feature-img" />
-      <h3 class="feature-title">${service.title}</h3>
-      <p class="feature-text">${service.text}</p>
-      </article>
-      `;
-    })
-    .join("");
-
-    featureGrid.innerHTML = cardsHTML;
-};
-
-//----Render Navigation using map()----//
-
-const renderNavigation = () => {
-
-  //Desktop Nav
-  if (nav) {
-    const navHTML = navLinks.map((link) => {
-      return `
-      <a href="${link.href}" class="nav-link">
-      ${link.label}
-      </a>
-      `;
-    })
-    .join(""); // join() is needed ot convert the array of strings into one big string wihtout commas in betweeen 
-    //we use empty string ("") as a seperator because we dont want anything in between the links (no commas, no spaces, dashes, etc)
-    nav.innerHTML = navHTML; //this is where we insert the generated HTML into the page 
-  }; //inner HTML is a property that allows us to set the HTML content of an element. When we set it, the browser parses the string as HTML and creates the corresponding DOM elements. In this case, it will create <a> elements inside the nav based on our navLinks data.
-
-  //Mobile Nav 
-  if (mobileMenu) {
-    const mobileHTML = navLinks.map (link => {
-      return `
-      <a href="${link.href}" class="mobile-link">
-        ${link.label}
-        </a>
-      `;
-    }) .join("");
-
-    mobileMenu.innerHTML = mobileHTML;
-  }
-};
-// ----- Helpers / Functions -----
-
-const handleHeaderOnScroll = () => {
-  if (!siteHeader) return;
-
-  if (window.scrollY > 10) {
-    siteHeader.classList.add("is-scrolled");
-  } else {
-    siteHeader.classList.remove("is-scrolled");
-  }
-};
-
-// Update footer year automatically
-
+// ----- Helper Functions -----
 const setCurrentYear = () => {
-  const now = new Date();
+  if (!yearEl) return;
 
-  yearEl.textContent = now.getFullYear();
+  yearEl.textContent = new Date().getFullYear();
 };
 
-// Toggle mobile menu open/close
+const formatHour = (hour) => {
+  if (hour === 0) return "Closed";
+  if (hour === 12) return "12pm";
+  if (hour > 12) return `${hour - 12}pm`;
+  return `${hour}am`;
+};
 
 let isMenuOpen = false;
 
 const toggleMobileMenu = () => {
   if (!mobileMenu) return;
 
-  if (isMenuOpen === false) {
+  if (!isMenuOpen) {
     mobileMenu.classList.add("is-open");
-
     isMenuOpen = true;
   } else {
     mobileMenu.classList.remove("is-open");
-
     isMenuOpen = false;
   }
 };
 
-// Close mobile menu (used when a link is clicked)
-
+// Close mobile menu when a link is clicked or when clicking outside the menu
 const closeMobileMenu = () => {
   if (!mobileMenu) return;
-
   mobileMenu.classList.remove("is-open");
-
   isMenuOpen = false;
 };
 
-// Reusable function with parameters (practice pattern)
-
+// Resusable functions to update text content in the hero section
 const updateHeadingText = (newText) => {
   if (!heading) return;
-
   heading.textContent = newText;
 };
 
-// ----- Event Listeners -----
+const updateSubtext = (newText) => {
+  if (!heroSubtext) return;
+  heroSubtext.textContent = newText;
+};
 
-// 1) Set year on page load
+// ----- Modal Logic -----
+const openServiceModal = (serviceId) => {
+  if (
+    !serviceModal ||
+    !serviceModalTitle ||
+    !serviceModalPrice ||
+    !serviceModalList
+  )
+    return;
 
-setCurrentYear();
+  const selectedService = services.find(
+    (service) => service.id === Number(serviceId),
+  );
+  if (!selectedService) return;
 
-window.addEventListener("scroll", handleHeaderOnScroll);
+  serviceModalTitle.textContent = selectedService.title;
+  serviceModalPrice.textContent = `$${selectedService.price}`;
+  serviceModalList.innerHTML = selectedService.details
+    .map((detail) => `<li>${detail}</li>`)
+    .join("");
 
-//run once on page load in case user refreshes midscroll
-handleHeaderOnScroll();
+  serviceModal.classList.add("is-open");
+  serviceModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+};
 
-//Intitialize when the page loads
-document.addEventListener('DOMContentLoaded', createCardShiftEffect);
+const closeServiceModal = () => {
+  if (!serviceModal) return;
 
-// 2) Hamburger menu toggle
+  serviceModal.classList.remove("is-open");
+  serviceModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+};
 
-if (menuBtn) {
-  menuBtn.addEventListener("click", () => {
-    toggleMobileMenu();
+// ----- Render Functions -----
+const renderNavigation = () => {
+  if (nav) {
+    nav.innerHTML = navLinks
+      .map(
+        (link) => `<a href="${link.href}" class="nav-link">${link.label}</a>`,
+      )
+      .join("");
+  }
+
+  if (mobileMenu) {
+    mobileMenu.innerHTML = navLinks
+      .map(
+        (link) =>
+          `<a href="${link.href}" class="mobile-link">${link.label}</a>`,
+      )
+      .join("");
+  }
+};
+
+const renderServices = () => {
+  if (!featureGrid) return;
+
+  const servicesHTML = services
+    .map((service) => {
+      const badgeHTML = service.popular
+        ? `<p class="service-badge">Popular Choice</p>`
+        : `<p class="service-badge alt-badge">Barber Favorite</p>`;
+
+      return `
+                <article class="feature-card">
+                    <img
+                        src="${service.image}"
+                        alt="${service.alt}"
+                        class="feature-img"
+                    />
+                    <h3 class="feature-title">${service.title}</h3>
+                    <p class="feature-text">${service.description}</p>
+                    ${badgeHTML}
+                    <p class="service-price">$${service.price}</p>
+
+                    <div class="service-actions">
+                        <button
+                            class="service-details-btn"
+                            type="button"
+                            data-service-id="${service.id}"
+                        >
+                            View Details
+                        </button>
+                    </div>
+                </article>
+            `;
+    })
+    .join("");
+
+  featureGrid.innerHTML = servicesHTML;
+};
+
+const renderHours = () => {
+  if (!hoursList) return;
+
+  hoursList.innerHTML = businessHours
+    .map((item) => {
+      if (item.open === 0 && item.close === 0) {
+        return `<li>${item.day}: Closed</li>`;
+      }
+      return `<li>${item.day}: ${formatHour(item.open)} -
+            ${formatHour(item.close)}</li>`;
+    })
+    .join("");
+};
+
+const renderContactInfo = () => {
+  if (phoneLink) {
+    phoneLink.textContent = shopInfo.phoneDisplay;
+    phoneLink.href = `tel:${shopInfo.phoneRaw}`;
+  }
+
+  if (addressLink) {
+    addressLink.textContent = shopInfo.address;
+    addressLink.href = "#";
+  }
+
+  if (emailLink) {
+    emailLink.textContent = shopInfo.email;
+    emailLink.href = `mailto:${shopInfo.email}`;
+  }
+};
+
+// ----- Open / Closed Logic -----
+const checkIfOpen = () => {
+  const now = new Date();
+  const currentDay = now.getDay();
+  const currentHour = now.getHours();
+
+  let schedule;
+
+  if (currentDay === 0) {
+    schedule = businessHours[6];
+  } else {
+    schedule = businessHours[currentDay - 1];
+  }
+
+  if (schedule.open === 0 && schedule.close === 0) {
+    updateSubtext("We are closed today. Book now for your next sharp look.");
+    return;
+  }
+
+  if (currentHour >= schedule.open && currentHour < schedule.close) {
+    updateSubtext(
+      "We're open right now — walk-ins welcome, appointments recommended.",
+    );
+  } else {
+    updateSubtext(
+      "We're currently closed, but you can still book your next appointment.",
+    );
+  }
+};
+
+// ----- Scroll Shift Cards -----
+const setupScrollShiftCards = () => {
+  if (!featureGrid) return;
+
+  let lastScrollY = window.scrollY;
+  let currentX = 0;
+  let ticking = false;
+
+  const getVisibleWidth = () => {
+    const parent = featureGrid.parentElement;
+    return parent ? parent.clientWidth : window.innerWidth;
+  };
+
+  const getMaxShift = () => {
+    return Math.max(0, featureGrid.scrollWidth - getVisibleWidth());
+  };
+
+  const updateCardTrack = () => {
+    const currentScrollY = window.scrollY;
+    const scrollDelta = currentScrollY - lastScrollY;
+
+    if (scrollDelta === 0) {
+      ticking = false;
+      return;
+    }
+
+    currentX -= scrollDelta * 0.3;
+
+    const maxShift = getMaxShift();
+
+    if (currentX < -maxShift) currentX = -maxShift;
+    if (currentX > 0) currentX = 0;
+
+    featureGrid.style.transform = `translateX(${currentX}px)`;
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  };
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateCardTrack);
+      ticking = true;
+    }
   });
-}
 
-// 3) Close mobile menu when a mobile link is clicked (event delegation)
+  window.addEventListener("resize", () => {
+    const maxShift = getMaxShift();
+
+    if (currentX < -maxShift) currentX = -maxShift;
+    if (currentX > 0) currentX = 0;
+
+    featureGrid.style.transform = `translateX(${currentX}px)`;
+  });
+};
+
+// ----- Event Listeners -----
+if (menuBtn) {
+  menuBtn.addEventListener("click", toggleMobileMenu);
+}
 
 if (mobileMenu) {
   mobileMenu.addEventListener("click", (event) => {
-    // If they clicked an <a> inside the menu, close it
-
     if (event.target.tagName === "A") {
       closeMobileMenu();
     }
   });
 }
 
-// 4) CTA Button: “Book Now” (placeholder behavior)
-
 if (ctaBtn) {
   ctaBtn.addEventListener("click", () => {
-    updateHeadingText("Booking coming next — great choice!");
+    const bookingSection = document.getElementById("cta");
+
+    if (bookingSection) {
+      bookingSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    updateHeadingText("Choose your date and time below.");
   });
 }
-
-// 5) Call Button: try to use the phone number in the footer
 
 if (callBtn) {
   callBtn.addEventListener("click", () => {
-    // If you later set phoneLink href to tel:, this will work perfectly.
-
-    // For now, this is a beginner-friendly placeholder.
-
-    if (phoneLink) {
-      updateHeadingText("Call us at " + phoneLink.textContent);
-    } else {
-      updateHeadingText("Call feature coming next!");
-    }
+    window.location.href = `tel:${shopInfo.phoneRaw}`;
   });
 }
 
-//card shift function: cards shift LEFT when scrolling DOWN, RIGHT when scrolling UP
-function createCardShiftEffect() {
-  const cardsContainer = featureGrid; //reuse your existing variable (no new query needed)
+if (featureGrid) {
+  featureGrid.addEventListener("click", (event) => {
+    const clickedButton = event.target.closest(".service-details-btn");
+    if (!clickedButton) return;
 
-  if (!cardsContainer) {
-    console.warn('Feature grid not found for card shift effect');
-    return;
-  }
-
-  // Use CSS custom property for smoothupdates
-  cardsContainer.style.setProperty('--translate-x', '0px');
-
-  let lastScrollY = window.scrollY;
-
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
-    const deltaY = currentScrollY - lastScrollY; //positive = scrolling down
-
-    let currentTranslate = parseFloat(getComputedStyle(cardsContainer).getPropertyValue("--translate-x")) || 0;
-
-    //sensitivity: negative = shift LEFT on scrollDOWN. positive would reverse it
-    const sensitivity = -1.8;
-    let newTranslate = currentTranslate + (deltaY * sensitivity);
-
-    //Optional soft limits so it doenst fly off too far
-    const maxShift = 600;
-    newTranslate = Math.max(-maxShift, Math.min(maxShift, newTranslate));
-
-    cardsContainer.style.setProperty('--translate-x', `${newTranslate}px`);
-
-    lastScrollY = currentScrollY;
-  };
-
-  //high performance scroll listner (already in your file)
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        handleScroll();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, {passive: true });
-
-  console.log('✅ Card shift effect intitialized (left on down/ right on up)');
+    const serviceId = clickedButton.dataset.serviceId;
+    openServiceModal(serviceId);
+  });
 }
-renderFeaturesMap();
+
+if (serviceModalClose) {
+  serviceModalClose.addEventListener("click", closeServiceModal);
+}
+
+if (serviceModalOverlay) {
+  serviceModalOverlay.addEventListener("click", closeServiceModal);
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeServiceModal();
+  }
+});
+
+// ----- App Start -----
+setCurrentYear();
 renderNavigation();
-handleHeaderOnScroll();
+renderServices();
+setupScrollShiftCards();
+renderHours();
+renderContactInfo();
+checkIfOpen();
+ 
